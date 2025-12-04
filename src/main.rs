@@ -1,6 +1,7 @@
 use std::fs::File;
 use std::io::{BufRead, BufReader};
 
+// advent of code 2025 day 1 -> https://adventofcode.com/2025/day/1
 fn main() -> Result<(), Box<dyn std::error::Error>> {
     let mut zero_count = 0;
     let mut cursor = 50;
@@ -16,8 +17,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
             _ => continue, // skip this line as the format is not right
         };
         s = s.chars().skip(1).collect();
-        let maybe_click = s.parse::<i32>();
-        let click_num = match maybe_click {
+        let click_num = match s.parse::<i32>() {
             Err(_) => continue,
             Ok(num) => num,
         };
