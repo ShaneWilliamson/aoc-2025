@@ -6,7 +6,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     let mut zero_count = 0;
     let mut cursor = 50;
 
-    let file = File::open("test_input.txt")?;
+    let file = File::open("inputs/d1_test_input.txt")?;
     let reader = BufReader::new(file);
 
     for line in reader.lines() {
