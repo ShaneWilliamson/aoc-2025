@@ -44,21 +44,31 @@ fn get_invalid_ids_from_range(
     id_start: &str,
     id_end: &str,
 ) -> Result<Vec<String>, Box<dyn std::error::Error>> {
-    if !id_start.len().is_multiple_of(2) && !id_end.len().is_multiple_of(2) {
-        return Ok(Vec::new());
-    }
+    // assume min decimals is 2
+    let range_divisions = 2..=id_end.len();
 
     let start_num = id_start.parse::<i64>()?;
     let end_num = id_end.parse::<i64>()?;
-    // dumb approach firsj
+
     let range: Vec<i64> = (start_num..=end_num).collect();
     let mut invalid_ids = Vec::new();
-    for id in range {
-        let id_str = id.to_string();
-        if id_str.len().is_multiple_of(2)
-            && id_str[0..id_str.len() / 2] == id_str[id_str.len() / 2..]
-        {
-            invalid_ids.push(id_str);
+    'outer: for id in range {
+        'inner: for rd in range_divisions.clone() {
+            let id_str = id.to_string();
+            if id_str.len().is_multiple_of(rd) {
+                let chars: Vec<char> = id_str.chars().collect();
+                // chunks is not doing what I think
+                let chunks: Vec<&[char]> = chars.chunks(id_str.len() / rd).collect();
+                for c in chunks.clone() {
+                    // all need to be equal, so we can just check agaist the first
+                    if c != chunks[0] {
+                        continue 'inner;
+                    }
+                }
+                // at this point we know it is invalid
+                invalid_ids.push(id.to_string());
+                continue 'outer;
+            }
         }
     }
 
