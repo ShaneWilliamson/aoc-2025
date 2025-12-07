@@ -57,7 +57,6 @@ fn get_invalid_ids_from_range(
             let id_str = id.to_string();
             if id_str.len().is_multiple_of(rd) {
                 let chars: Vec<char> = id_str.chars().collect();
-                // chunks is not doing what I think
                 let chunks: Vec<&[char]> = chars.chunks(id_str.len() / rd).collect();
                 for c in chunks.clone() {
                     // all need to be equal, so we can just check agaist the first
